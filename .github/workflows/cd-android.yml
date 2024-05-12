@@ -38,30 +38,28 @@ jobs:
   publish-android:
     runs-on: windows-latest
     name: Android Publish
-
+  
     steps:
-  - name: Setup .NET ${{ inputs.dotnet-version }}
-    uses: actions/setup-dotnet@v2
-    with:
-      dotnet-version: ${{ inputs.dotnet-version }}
-
-  - uses: actions/checkout@v3
-    name: Checkout the code
-
-  # This step might be obsolete at some point as .NET MAUI workloads 
-  # are starting to come pre-installed on the GH Actions build agents.
-  - name: Install MAUI Workload
-    run: dotnet workload install maui --ignore-failed-sources
-
-  - name: Restore Dependencies
-    run: dotnet restore ${{ inputs.project-file }}   
-
-  - name: Decode Keystore
-    id: decode_keystore
-    uses: timheuer/base64-to-file@v1
-    with:
-      fileDir: '${{ github.workspace }}\${{ inputs.project-folder }}'
-      fileName: 'ourkeystore.jks'
-      encodedString: ${{ secrets.keystore }}
- 
-
+    - name: Setup .NET ${{ inputs.dotnet-version }}
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+  
+    - uses: actions/checkout@v3
+      name: Checkout the code
+  
+    # This step might be obsolete at some point as .NET MAUI workloads 
+    # are starting to come pre-installed on the GH Actions build agents.
+    - name: Install MAUI Workload
+      run: dotnet workload install maui --ignore-failed-sources
+  
+    - name: Restore Dependencies
+      run: dotnet restore ${{ inputs.project-file }}   
+  
+    - name: Decode Keystore
+      id: decode_keystore
+      uses: timheuer/base64-to-file@v1
+      with:
+        fileDir: '${{ github.workspace }}\${{ inputs.project-folder }}'
+        fileName: 'ourkeystore.jks'
+        encodedString: ${{ secrets.keystore }}
