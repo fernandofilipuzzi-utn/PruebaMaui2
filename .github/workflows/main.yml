@@ -20,6 +20,7 @@ env:
   DOTNET_VERSION_TARGETS: NET8.0
   CSPROJ_TO_BUILD: './PruebaMaui/PruebaMaui/PruebaMaui.csproj'
   PROJECT_FOLDER: 'PruebaMaui'
+  PACKAGE_NAME: 'com.PruebaMAUI.app'
 
 jobs:
   vars:
@@ -31,6 +32,7 @@ jobs:
       dotnetVersionTargets: ${{ env.DOTNET_VERSION_TARGETS }}
       csprojToBuild: ${{ env.CSPROJ_TO_BUILD }}
       projectFolder: ${{ env.PROJECT_FOLDER }}
+      package-name: ${{ env.PACKAGE_NAME }}
     steps:
       - run: echo "Exposing env vars, because they can't be passed to nested workflows."  
 
