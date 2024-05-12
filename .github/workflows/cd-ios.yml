@@ -1,0 +1,55 @@
+
+name: CD Build
+
+on:
+    workflow_call:
+        inputs:
+            dotnet-version:
+                required: true
+                type: string
+            dotnet-version-target:
+                required: true
+                type: string
+            xcode-version:
+                required: true
+                type: string
+            project-file:
+                required: true
+                type: string
+            project-folder:
+                required: true
+                type: string
+            build-config:
+                required: true
+                type: string
+            build-version:
+                required: true
+                type: string
+
+jobs:
+    publish-ios:
+        runs-on: macos-latest
+        name: iOS Publish
+    
+        steps:  
+        - uses: maxim-lobanov/setup-xcode@v1
+          name: Set XCode version
+          with:
+            xcode-version: ${{ inputs.xcode-version }}
+
+        - name: Setup .NET ${{ inputs.dotnet-version }}
+          uses: actions/setup-dotnet@v2
+          with:
+            dotnet-version: ${{ inputs.dotnet-version }}
+
+        - uses: actions/checkout@v3
+          name: Checkout the code
+
+      # This step might be obsolete at some point as .NET MAUI workloads 
+      # are starting to come pre-installed on the GH Actions build agents.
+        - name: Install MAUI Workload
+          run: dotnet workload install maui --ignore-failed-sources
+
+        - name: Restore Dependencies
+          run: dotnet restore ${{ inputs.project-file }}
+    

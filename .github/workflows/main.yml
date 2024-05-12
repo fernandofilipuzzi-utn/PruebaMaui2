@@ -1,0 +1,47 @@
+
+name: CD Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - "**.md"
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+      - '**/*.yml'
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  BUILD_VERSION: '1.0'
+  DOTNET_VERSION: 8.0.x
+  XCODE_VERSION: 15.2
+  DOTNET_VERSION_TARGETS: NET8.0
+  CSPROJ_TO_BUILD: './PruebaMaui/PruebaMaui/PruebaMaui.csproj'
+  PROJECT_FOLDER: 'PruebaMaui'
+
+jobs:
+  vars:
+    runs-on: ubuntu-22.04
+    outputs:      
+      buildVersion: ${{ env.BUILD_VERSION }}
+      dotnetVersion: ${{ env.DOTNET_VERSION }}
+      xcodeVersion: ${{ env.XCODE_VERSION }}
+      dotnetVersionTargets: ${{ env.DOTNET_VERSION_TARGETS }}
+      csprojToBuild: ${{ env.CSPROJ_TO_BUILD }}
+      projectFolder: ${{ env.PROJECT_FOLDER }}
+    steps:
+      - run: echo "Exposing env vars, because they can't be passed to nested workflows."  
+
+  build-ios:   
+    needs: vars
+    uses: './.github/workflows/cd-ios.yml'
+    with:
+      dotnet-version: ${{ needs.vars.outputs.dotnetVersion }}
+      dotnet-version-target: ${{ needs.vars.outputs.dotnetVersionTargets }}
+      xcode-version: ${{ needs.vars.outputs.xcodeVersion }}
+      project-file: ${{ needs.vars.outputs.csprojToBuild }}
+      project-folder: ${{ needs.vars.outputs.projectFolder }}
+      build-config: 'Release'
+      build-version: ${{ needs.vars.outputs.buildVersion }}
