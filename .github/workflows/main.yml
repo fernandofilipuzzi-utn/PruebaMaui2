@@ -45,3 +45,8 @@ jobs:
       project-folder: ${{ needs.vars.outputs.projectFolder }}
       build-config: 'Release'
       build-version: ${{ needs.vars.outputs.buildVersion }}
+    secrets:
+      keystore: ${{ secrets.PLAY_KEYSTORE }}
+      keystore-alias: ${{ secrets.PLAY_KEYSTORE_ALIAS }}
+      keystore-password: ${{ secrets.PLAY_KEYSTORE_PASS }}
+      playstore-service-account: ${{ secrets.PLAYSTORE_SERVICE_ACC }}      
