@@ -1,5 +1,5 @@
 
-name: CD Build
+name: CD MAIN Build
 
 on:
   workflow_dispatch:
